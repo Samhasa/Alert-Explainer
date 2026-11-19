@@ -40,6 +40,19 @@ def read_alert(alert_id: int, db: Session = Depends(get_db)) -> Alert:
 
 @router.post("/{alert_id}/explain", response_model=ExplainResponse)
 def explain_alert(alert_id: int, db: Session = Depends(get_db)) -> ExplainResponse:
+    """Return a rule-based explanation for a specific alert.
+
+    Args:
+        alert_id: ID of the alert to explain.
+        db: Database session supplied by dependency injection.
+
+    Returns:
+        The alert ID, explanation text, and UTC generation timestamp.
+
+    Raises:
+        HTTPException: With status 404 and detail "Alert not found" when the
+            alert does not exist.
+    """
     alert = get_alert_or_404(alert_id, db)
     return ExplainResponse(
         alert_id=alert.id,
